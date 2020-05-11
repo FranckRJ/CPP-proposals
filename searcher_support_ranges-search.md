@@ -31,7 +31,7 @@ auto rng_call_ret = std::ranges(rng, srchr);
 auto iter_call_ret = std::ranges(std::ranges::begin(rng), std::ranges::end(rng), srchr);
 ```
 
-The searcher parameter will be constrained with a new `searcher` concept that will ensure that the type is callable with an iterator and a sentinel of some range *R*, and that its return type can be destructured into two variables (with a structured binding) that can be used to construct a subrange of type *R*.
+The searcher parameter will be constrained with a new `searcher` concept that will ensure that the type is callable with an iterator and a sentinel of some range *R*, and that its return type is a tuple-like of size 2 where its 0th and 1st elements can be used to construct a subrange of type *R*.
 
 Basically this code should compile for a type *S* to model the concept `searcher` for a range of type *R*:
 
@@ -39,8 +39,8 @@ Basically this code should compile for a type *S* to model the concept `searcher
 S srchr{/*...*/};
 R rng{/*...*/};
 
-auto [begin_ret, end_ret]{std::invoke(srchr, std::ranges::begin(rng), std::ranges::end(rng))};
-std::ranges::subrange<std::ranges::iterator_t<R>> sub_rng{begin_ret, end_ret};
+auto iterators{std::invoke(srchr, std::ranges::begin(rng), std::ranges::end(rng))};
+std::ranges::subrange<std::ranges::iterator_t<R>> sub_rng{std::get<0>(iterators), std::get<1>(iterators)};
 ```
 
 The limitation of this design is that if a type T model both `searcher` and `range`, the call:
@@ -54,7 +54,7 @@ std::ranges::search(rng, rng_and_srchr); // search(rng, rng) or search(rng, srch
 
 Will be ambiguous, when in C++20 it was valid. But because this would be very unlikely to happen it is not considered as an issue.
 
-A WIP implementation based on range-v3 can be found here : [https://godbolt.org/z/dHWPfj](https://godbolt.org/z/dHWPfj).
+A WIP implementation based on range-v3 can be found here : [https://godbolt.org/z/BGdp5k](https://godbolt.org/z/BGdp5k).
 
 ## Wording
 
