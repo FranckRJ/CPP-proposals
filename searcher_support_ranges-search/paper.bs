@@ -1,10 +1,18 @@
-# Searcher support for ranges::search
+<pre class='metadata'>
+Title: Searcher support for ranges::search
+Shortname: papernumber
+Revision: 0
+Audience: LWG
+Status: D
+Group: WG21
+Editor: Franck W., franck.rj.w@gmail.com
+URL: https://github.com/FranckRJ/CPP-proposals/blob/master/searcher_support_ranges-search/paper.html
+Abstract: This paper propose to add searcher support for ranges::search, to be on par with std::search.
+Date: now
+Markup Shorthands: markdown yes
+</pre>
 
-## Abstract 
-
-This paper propose to add searcher support for ranges::search, to be on par with std::search.
-
-## Motivation and Scope
+# Motivation and Scope
 
 The current std::search function support searchers, but not ranges::search, this is confusing when you want to migrate to the new ranges library.
 
@@ -19,7 +27,7 @@ auto result_rng{std::ranges::search(haystack, srchr)}; // This doesn't work in C
 
 The scope of this paper is limited to searcher support for ranges::search, no new searchers with sentinel support are proposed.
 
-## Design decisions
+# Design decisions
 
 Two new constrained overloads for the CPO ranges::search will be added, one taking a range and a searcher, the other taking a iterator / sentinel and a searcher. Thus, making these calls valid for a type *S* modeling `searcher` and a type *R* modeling `range`:
 
@@ -56,6 +64,6 @@ Will be ambiguous, when in C++20 it was valid. But because this would be very un
 
 A WIP implementation based on range-v3 can be found here : [https://godbolt.org/z/BGdp5k](https://godbolt.org/z/BGdp5k).
 
-## Wording
+# Wording
 
 TODO.
