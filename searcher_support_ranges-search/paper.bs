@@ -66,4 +66,29 @@ A WIP implementation based on range-v3 can be found here : [https://godbolt.org/
 
 # Wording # {#wording}
 
-TODO.
+Add [\*somewhere\*.searcher]:
+
+>```cpp
+> template<typename F, typename I, typename S>
+>   concept searcher =
+>     forward_iterator<I> &&
+>     sentinel_for<S, I> &&
+>     regular_invocable<F, I, S> &&
+>     tuple_size_v<invoke_result_t<F, I, S>> == 2 &&
+>     constructible_from<ranges::subrange<I>,
+>                        tuple_element_t<0, invoke_result_t<F, I, S>>,
+>                        tuple_element_t<1, invoke_result_t<F, I, S>>>;
+>```
+
+Add a new section in [alg.search]:
+
+>```cpp
+> template<forward_iterator I, sentinel_for<I> S, searcher<I, S> Srchr>
+>   constexpr subrange<I>
+>     ranges::search(I first, S last, const Srchr& searcher);
+> template<forward_range R, searcher<iterator_t<R>, sentinel_t<R>> Srchr>
+>   constexpr borrowed_subrange_t<R>
+>     ranges::search(R&& rng, const Srchr& searcher);
+>```
+>
+> WIP
