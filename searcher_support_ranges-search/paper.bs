@@ -60,7 +60,7 @@ T rng_and_srchr{/*...*/};
 std::ranges::search(rng, rng_and_srchr); // search(rng, rng) or search(rng, srchr) ?
 ```
 
-Will be ambiguous, when in C++20 it was valid. But because this would be very unlikely to happen it is not considered as an issue.
+Will be ambiguous, when in C++20 it was valid. A possible fix could be to add another constraint to the new search overload, so the searcher parameter can't be a range, but because an error is better than an ambiguous call from the reader perspective and that this would be very unlikely to happen it is not considered as an issue, so it won't be fixed.
 
 A WIP implementation based on range-v3 can be found here : [https://godbolt.org/z/BGdp5k](https://godbolt.org/z/BGdp5k).
 
